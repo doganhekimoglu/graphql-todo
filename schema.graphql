@@ -1,0 +1,49 @@
+type User {
+  id: ID!
+  username: String!
+  createdAt: String!
+  todos: [Todo!]
+}
+
+type AuthUser {
+  token: String!
+  user: User!
+}
+
+enum TODO_STATUS {
+  COMPLETED
+  TODO
+}
+
+type Todo {
+  id: ID!
+  name: String!
+  status: TODO_STATUS!
+}
+
+input SignupInput {
+  username: String!
+  password: String!
+}
+
+input SigninInput {
+  username: String!
+  password: String!
+}
+
+input UpdateTodoStatusInput {
+  id: ID!
+  status: TODO_STATUS!
+}
+
+type Query {
+  user: User!
+}
+
+type Mutation {
+  signup(input: SignupInput!): AuthUser!
+  signin(input: SigninInput!): AuthUser!
+  createTodo(name: String!): Todo!
+  deleteTodo(id: String): Todo!
+  updateTodoStatus(input: UpdateTodoStatusInput!): Todo!
+}
