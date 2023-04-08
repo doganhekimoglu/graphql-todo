@@ -1,8 +1,8 @@
-import { createJWT, hashPassword } from "../../utils/auth";
-import { MutationResolvers } from "../resolvers-types.generated";
-import { GraphQlContext } from "../resolvers/resolvers";
-import { PRISMA_UNIQUE_CONSTRAINT } from "../../constants";
-import { UserAlreadyExistsError } from "../errors";
+import { createJWT, hashPassword } from "../../../utils/auth";
+import { MutationResolvers } from "../../resolvers-types.generated";
+import { GraphQlContext } from "../../resolvers/resolvers";
+import { PRISMA_UNIQUE_CONSTRAINT } from "../../../constants";
+import { UserAlreadyExistsError } from "../../errors";
 
 const signup: MutationResolvers<GraphQlContext>["signup"] = async (_, { input: { username, password } }, { db }) => {
   try {

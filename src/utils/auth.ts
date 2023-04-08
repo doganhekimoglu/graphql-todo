@@ -4,6 +4,7 @@ import config from "../config";
 import { Resolver, ResolverFn, ResolverTypeWrapper } from "../graphql/resolvers-types.generated";
 import { GraphQlContext } from "../graphql/resolvers/resolvers";
 import { AuthenticationError, SessionExpiredError } from "../graphql/errors";
+import { GraphQLResolveInfo } from "graphql";
 
 interface IUser {
   id: string;
@@ -33,17 +34,18 @@ export const verifyJWT = (token: string) => {
   }
 };
 
-function isResolveFn(fn: any): fn is ResolverFn<any, any, any, any> {
-  return typeof fn === "function";
+function assertIsResolveFn(fn: any): asserts fn is ResolverFn<any, any, any, any> {
+  if (typeof fn !== "function") {
+    throw new Error("fn is not callable");
+  }
 }
 
-export function resolveWithAuth<T, U, K>(resolver: T extends Resolver<U, any, any, K> ? T : never) {
-  return function (root: any, params: K, context: GraphQlContext, info: any): ResolverTypeWrapper<U> {
+export function resolveWithAuth<TResult, TArgs, TParent>(resolver: Resolver<TResult, TParent, GraphQlContext, TArgs>) {
+  assertIsResolveFn(resolver);
+  return function (root: TParent, params: TArgs, context: GraphQlContext, info: GraphQLResolveInfo): ResolverTypeWrapper<TResult> {
     if (!context.user) {
       throw new AuthenticationError();
     }
-    if (isResolveFn(resolver)) {
-      return resolver(root, params, context, info);
-    }
+    return resolver(root, params, context, info);
   };
 }

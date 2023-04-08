@@ -1,7 +1,7 @@
-import { MutationResolvers } from "../resolvers-types.generated";
-import { GraphQlContext } from "../resolvers/resolvers";
-import { comparePasswords, createJWT } from "../../utils/auth";
-import { InvalidCredentialsError } from "../errors";
+import { MutationResolvers } from "../../resolvers-types.generated";
+import { GraphQlContext } from "../../resolvers/resolvers";
+import { comparePasswords, createJWT } from "../../../utils/auth";
+import { InvalidCredentialsError } from "../../errors";
 
 const signin: MutationResolvers<GraphQlContext>["signin"] = async (_, { input: { username, password } }, { db }) => {
   const existingUser = await db.user.findUnique({
