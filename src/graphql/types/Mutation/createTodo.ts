@@ -11,6 +11,7 @@ const createTodo: MutationResolvers<GraphQlContext>["createTodo"] = resolveWithA
     id: newTodo.id,
     name: newTodo.name,
     status: newTodo.status as Todo_Status,
+    userId: user.id,
   };
 });
 

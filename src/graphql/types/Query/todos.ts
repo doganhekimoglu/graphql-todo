@@ -1,7 +1,8 @@
-import { Todo_Status, UserResolvers } from "../../resolvers-types.generated";
+import { QueryResolvers, Todo_Status } from "../../resolvers-types.generated";
 import { GraphQlContext } from "../../resolvers/resolvers";
+import { resolveWithAuth } from "../../../utils/auth";
 
-const todos: UserResolvers<GraphQlContext>["todos"] = async (user, __, { db }) => {
+const todos: QueryResolvers<GraphQlContext>["todos"] = resolveWithAuth(async (_, __, { db, user }) => {
   const todos = await db.todo.findMany({
     where: {
       userId: user.id,
@@ -14,6 +15,6 @@ const todos: UserResolvers<GraphQlContext>["todos"] = async (user, __, { db }) =
     status: todo.status as Todo_Status,
     userId: user.id,
   }));
-};
+});
 
 export default todos;

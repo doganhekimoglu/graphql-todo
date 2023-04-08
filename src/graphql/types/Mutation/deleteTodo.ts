@@ -19,6 +19,7 @@ const deleteTodo: MutationResolvers<GraphQlContext>["deleteTodo"] = resolveWithA
       id: todo.id,
       name: todo.name,
       status: todo.status as Todo_Status,
+      userId: user.id,
     };
   } catch (e: any) {
     if (e.code === PRISMA_NOT_FOUND) {

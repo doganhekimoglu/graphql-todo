@@ -19,6 +19,8 @@ type Todo {
   id: ID!
   name: String!
   status: TODO_STATUS!
+  userId: String!
+  user: User
 }
 
 input SignupInput {
@@ -38,6 +40,7 @@ input UpdateTodoStatusInput {
 
 type Query {
   user: User!
+  todos: [Todo!]!
 }
 
 type Mutation {
