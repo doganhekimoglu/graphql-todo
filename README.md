@@ -1,4 +1,4 @@
-**Todo backend example with Typescript, GraphQl, Postgres and Prisma Client**.
+**Todo backend example with Typescript, GraphQl, Apollo Server, Postgres and Prisma Client**.
 
 - For local development change .env.example to .env and fill environment variables.
 
