@@ -8,6 +8,6 @@
 
 - To generate GraphQl type definitions from the `schema.graphql` file run the command `npm run codegen`.
 
-- GraphQl Playground: https://todo-graphql-production-da76.up.railway.app/graphql.
+- GraphQl Playground: https://graphql-todo-production.up.railway.app/graphql.
 
 - To do create, delete and update mutations do no forget to add the JWT token to `Authorization` header as Bearer.
