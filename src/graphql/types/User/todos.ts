@@ -1,12 +1,8 @@
 import { Todo_Status, UserResolvers } from "../../resolvers-types.generated";
 import { GraphQlContext } from "../../resolvers/resolvers";
 
-const todos: UserResolvers<GraphQlContext>["todos"] = async (user, __, { db }) => {
-  const todos = await db.todo.findMany({
-    where: {
-      userId: user.id,
-    },
-  });
+const todos: UserResolvers<GraphQlContext>["todos"] = async (user, __, { db: _, todoLoader }) => {
+  const todos = await todoLoader.getTodosByUserId(user.id);
 
   return todos.map((todo) => ({
     id: todo.id,

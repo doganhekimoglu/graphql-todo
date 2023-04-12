@@ -13,6 +13,7 @@ import db from "./utils/db";
 import { loadSchemaSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { verifyJWT } from "./utils/auth";
+import { TodoLoader, UserLoader } from "./graphql/dataloaders";
 
 let SCHEMA = loadSchemaSync(GRAPHQL_SCHEMA_PATH, {
   loaders: [new GraphQLFileLoader()],
@@ -52,7 +53,7 @@ let SCHEMA = loadSchemaSync(GRAPHQL_SCHEMA_PATH, {
                 },
               },
             });
-            return { db, user };
+            return { db, user, userLoader: new UserLoader(), todoLoader: new TodoLoader() };
           }
         }
         return { db };

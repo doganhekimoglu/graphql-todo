@@ -1,15 +1,8 @@
 import { TodoResolvers } from "../../resolvers-types.generated";
 import { GraphQlContext } from "../../resolvers/resolvers";
 
-const user: TodoResolvers<GraphQlContext>["user"] = async (todo, __, { db }) => {
-  const user = await db.user.findUnique({
-    where: {
-      id_deleted: {
-        id: todo.userId,
-        deleted: false,
-      },
-    },
-  });
+const user: TodoResolvers<GraphQlContext>["user"] = async (todo, __, { userLoader }) => {
+  const user = await userLoader.getUserById(todo.userId);
 
   return {
     id: user.id,
