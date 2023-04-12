@@ -1,8 +1,7 @@
 import { MutationResolvers, Todo_Status } from "../../resolvers-types.generated";
 import { GraphQlContext } from "../../resolvers/resolvers";
-import { resolveWithAuth } from "../../../utils/auth";
 
-const createTodo: MutationResolvers<GraphQlContext>["createTodo"] = resolveWithAuth(async (_, { name }, { db, user }) => {
+const createTodo: MutationResolvers<GraphQlContext>["createTodo"] = async (_, { name }, { db, user }) => {
   const newTodo = await db.todo.create({
     data: { name, user: { connect: { id: user.id } } },
   });
@@ -13,6 +12,6 @@ const createTodo: MutationResolvers<GraphQlContext>["createTodo"] = resolveWithA
     status: newTodo.status as Todo_Status,
     userId: user.id,
   };
-});
+};
 
 export default createTodo;

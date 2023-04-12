@@ -2,9 +2,8 @@ import { MutationResolvers, Todo_Status } from "../../resolvers-types.generated"
 import { GraphQlContext } from "../../resolvers/resolvers";
 import { AuthenticationError } from "../../errors";
 import { PRISMA_NOT_FOUND } from "../../../constants";
-import { resolveWithAuth } from "../../../utils/auth";
 
-const deleteTodo: MutationResolvers<GraphQlContext>["deleteTodo"] = resolveWithAuth(async (_, { id }, { db, user }) => {
+const deleteTodo: MutationResolvers<GraphQlContext>["deleteTodo"] = async (_, { id }, { db, user }) => {
   try {
     const todo = await db.todo.delete({
       where: {
@@ -27,6 +26,6 @@ const deleteTodo: MutationResolvers<GraphQlContext>["deleteTodo"] = resolveWithA
     }
     throw e;
   }
-});
+};
 
 export default deleteTodo;

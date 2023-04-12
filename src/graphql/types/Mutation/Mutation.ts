@@ -5,13 +5,14 @@ import signin from "./signin";
 import createTodo from "./createTodo";
 import deleteTodo from "./deleteTodo";
 import updateTodoStatus from "./updateTodoStatus";
+import { resolveWithAuth } from "../../../utils/auth";
 
 const MutationResolver: MutationResolvers<GraphQlContext> = {
   signup,
   signin,
-  createTodo,
-  deleteTodo,
-  updateTodoStatus,
+  createTodo: resolveWithAuth(createTodo),
+  deleteTodo: resolveWithAuth(deleteTodo),
+  updateTodoStatus: resolveWithAuth(updateTodoStatus),
 };
 
 export default MutationResolver;
