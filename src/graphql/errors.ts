@@ -14,6 +14,14 @@ export class InvalidCredentialsError extends GraphQLError {
   }
 }
 
+export class InvalidTokenError extends GraphQLError {
+  constructor() {
+    super("Invalid token", {
+      extensions: { code: "INVALID_TOKEN" },
+    });
+  }
+}
+
 export class SessionExpiredError extends GraphQLError {
   constructor() {
     super("Session expired, please re-login", {

@@ -3,8 +3,10 @@ import bcrypt from "bcrypt";
 import config from "../config";
 import { Resolver, ResolverFn, ResolverTypeWrapper } from "../graphql/resolvers-types.generated";
 import { GraphQlContext } from "../graphql/resolvers/resolvers";
-import { AuthenticationError, SessionExpiredError } from "../graphql/errors";
+import { AuthenticationError, InvalidTokenError, SessionExpiredError } from "../graphql/errors";
 import { GraphQLResolveInfo } from "graphql";
+import { Request } from "express";
+import db from "./db";
 
 interface IUser {
   id: string;
@@ -30,7 +32,23 @@ export const verifyJWT = (token: string) => {
     if (e instanceof TokenExpiredError) {
       throw new SessionExpiredError();
     }
-    throw e;
+    throw new InvalidTokenError();
+  }
+};
+
+export const authenticate = (req: Request) => {
+  const { authorization } = req.headers;
+  if (authorization) {
+    const bearer = authorization.split(" ")[1];
+    const userObject = verifyJWT(bearer);
+    return db.user.findUnique({
+      where: {
+        id_deleted: {
+          id: userObject.id,
+          deleted: false,
+        },
+      },
+    });
   }
 };
 

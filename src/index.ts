@@ -12,7 +12,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import db from "./utils/db";
 import { loadSchemaSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
-import { verifyJWT } from "./utils/auth";
+import { authenticate } from "./utils/auth";
 import { TodoLoader, UserLoader } from "./graphql/dataloaders";
 
 let SCHEMA = loadSchemaSync(GRAPHQL_SCHEMA_PATH, {
@@ -40,21 +40,9 @@ let SCHEMA = loadSchemaSync(GRAPHQL_SCHEMA_PATH, {
     express.json(),
     expressMiddleware(server, {
       context: async ({ req }) => {
-        const { authorization } = req.headers;
-        if (authorization) {
-          const bearer = authorization.split(" ")[1];
-          if (bearer) {
-            const userObject = verifyJWT(bearer);
-            const user = await db.user.findUnique({
-              where: {
-                id_deleted: {
-                  id: userObject.id,
-                  deleted: false,
-                },
-              },
-            });
-            return { db, user, userLoader: new UserLoader(), todoLoader: new TodoLoader() };
-          }
+        const user = await authenticate(req);
+        if (user) {
+          return { db, user, userLoader: new UserLoader(), todoLoader: new TodoLoader() };
         }
         return { db };
       },
